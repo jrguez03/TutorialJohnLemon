@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     Animator m_Animator;
     Rigidbody m_Rigidbody;
+    AudioSource m_AudioSource;
     Vector3 m_Movement;
     Quaternion m_Rotation = Quaternion.identity;
 
@@ -16,8 +17,10 @@ public class PlayerMovement : MonoBehaviour
     {
         //LLamamos a la componente Animator de la variable.
         m_Animator = GetComponent<Animator>();
-        //LLamamos a la componente Rigidbody
+        //LLamamos a la componente Rigidbody de la vbariable.
         m_Rigidbody = GetComponent<Rigidbody>();
+        //Llamamos a la componente AudioSource de la variable.
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
     //Cambiamos el Update a FixedUpdate porque ahora estoamos utilizando la función OnAnimatorMove, que se ejecuta con físicas.
@@ -41,6 +44,19 @@ public class PlayerMovement : MonoBehaviour
         bool isWalking = hasHorizontalInput || hasVerticalInput;
         //Esta línea llama el SetBool Method utilizando la referencia de la componente Animator.
         m_Animator.SetBool("IsWalking", isWalking);
+
+        //Esto hará que el audio suene cuando el player esté en movimiento, si está parado, dejará de sonar.
+        if (isWalking)
+        {
+            if (!m_AudioSource.isPlaying)
+            {
+                m_AudioSource.Play();
+            }
+        }
+        else
+        {
+            m_AudioSource.Stop();
+        }
 
         /*Llamamos a la componente transform de una forma más sencilla y hacemos que la rotación sea fluida en cualquier 
         dispositivo gracias al Time.delTime.*/
