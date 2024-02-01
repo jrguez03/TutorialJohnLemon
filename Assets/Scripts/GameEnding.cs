@@ -15,8 +15,8 @@ public class GameEnding : MonoBehaviour
 
     bool m_IsPlayerAtExit;
     bool m_IsPlayerCaught;
-    float m_Timer;
     bool m_HasAudioPlayed;
+    float m_Timer;
 
     //Función para que cuando el GameObject entre en contacto con el Trigger, se ejecute la acción.
     void OnTriggerEnter(Collider other)
@@ -30,12 +30,13 @@ public class GameEnding : MonoBehaviour
 
     public void CaughtPlayer()
     {
+        
         m_IsPlayerCaught = true;
     }
 
     void Update()
     {
-        if(m_IsPlayerAtExit)
+        if (m_IsPlayerAtExit)
         {
             EndLevel(exitBackgroundImageCanvasGroup, false, exitAudio);
         }

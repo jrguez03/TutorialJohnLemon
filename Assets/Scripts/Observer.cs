@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class Observer : MonoBehaviour
 {
+    [SerializeField] GameObject m_Exclamation;
     public Transform player;
     public GameEnding gameEnding;
+    public AudioSource exclamationAudio;
+
     bool m_IsPlayerInRange;
+    float cD_Timer = 0f;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.transform == player)
         {
+            exclamationAudio.Play();
+            m_Exclamation.SetActive(true);
             m_IsPlayerInRange = true;
         }
     }
@@ -20,8 +28,20 @@ public class Observer : MonoBehaviour
     {
         if (other.transform == player)
         {
+            m_Exclamation.SetActive(false);
             m_IsPlayerInRange = false;
+            ResetTimer();
         }
+    }
+
+    private void Start()
+    {
+        m_Exclamation.SetActive(false);
+    }
+
+    public void ResetTimer()
+    {
+        cD_Timer = 0f;
     }
 
     void Update()
@@ -39,7 +59,11 @@ public class Observer : MonoBehaviour
             {
                 if (raycastHit.collider.transform == player)
                 {
-                    gameEnding.CaughtPlayer();
+                    cD_Timer += Time.deltaTime;
+                    if (cD_Timer >= 2f)
+                    {
+                        gameEnding.CaughtPlayer();
+                    }
                 }
             }
         }
